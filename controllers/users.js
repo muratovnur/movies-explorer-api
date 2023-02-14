@@ -5,6 +5,7 @@ const User = require('../models/user');
 const { BadRequestError } = require('../errors/BadRequestError');
 const { ConflictError } = require('../errors/ConflictError');
 const { NotFoundError } = require('../errors/NotFoundError');
+const { OK } = require('../utils/constants');
 
 const { NODE_ENV = 'dev', JWT_SECRET } = process.env;
 
@@ -13,7 +14,7 @@ const createUser = (req, res, next) => {
 
   bcrypt.hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name }))
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(OK).send(user))
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя.'));
@@ -40,14 +41,14 @@ const signin = (req, res, next) => {
         sameSite: true,
       });
 
-      res.status(200).send(user);
+      res.status(OK).send(user);
     })
     .catch(next);
 };
 
 const signout = (req, res) => {
   res.clearCookie('jwt');
-  res.status(200).send({ message: 'Выход успешно выполнен!' });
+  res.status(OK).send({ message: 'Выход успешно выполнен!' });
 };
 
 const getUserProfileInfo = (req, res, next) => {
@@ -57,7 +58,7 @@ const getUserProfileInfo = (req, res, next) => {
         throw new NotFoundError('Пользователь по указанному _id не найден.');
       }
 
-      res.status(200).send(user);
+      res.status(OK).send(user);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -79,7 +80,7 @@ const updateUserProfileInfo = (req, res, next) => {
       throw new NotFoundError('Пользователь по указанному _id не найден.');
     }
 
-    res.status(200).send(user);
+    res.status(OK).send(user);
   }).catch((err) => {
     if (err instanceof mongoose.Error.CastError) {
       next(new BadRequestError('Передан некорректный _id пользователя.'));

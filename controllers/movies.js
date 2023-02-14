@@ -3,18 +3,19 @@ const Movie = require('../models/movie');
 const { BadRequestError } = require('../errors/BadRequestError');
 const { ForbiddenError } = require('../errors/ForbiddenError');
 const { NotFoundError } = require('../errors/NotFoundError');
+const { OK } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
     .then((movies) => {
-      res.status(200).send(movies);
+      res.status(OK).send(movies);
     })
     .catch(next);
 };
 
 const createMovie = (req, res, next) => {
   Movie.create({ ...req.body, owner: req.user._id })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.status(OK).send(movie))
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         next(new BadRequestError('Переданы некорректные данные фильма.'));
@@ -38,7 +39,7 @@ const deleteMovie = (req, res, next) => {
 
       movie.delete();
 
-      return res.status(200).send(movie);
+      return res.status(OK).send(movie);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {

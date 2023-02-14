@@ -12,6 +12,7 @@ const { validateCreateUser, validateSignin } = require('./middlewares/validators
 const { auth } = require('./middlewares/auth');
 const { handleError } = require('./middlewares/handleError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { NotFoundError } = require('./errors/NotFoundError');
 
 const { DATABASE_ADDRESS = 'mongodb://127.0.0.1:27017/bitfilmsdb', PORT = 3000 } = process.env;
 
@@ -36,6 +37,7 @@ app.use(auth);
 app.use('/users', usersRouter);
 app.use('/movies', moviesRouter);
 app.get('/signout', signout);
+app.use('/', (req, res, next) => next(new NotFoundError('По указанному пути ничего не найдено.')));
 
 app.use(errorLogger);
 
