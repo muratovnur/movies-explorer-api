@@ -14,7 +14,11 @@ const createUser = (req, res, next) => {
 
   bcrypt.hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name }))
-    .then((user) => res.status(OK).send(user))
+    .then((user) => res.status(OK).send({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    }))
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя.'));
@@ -41,7 +45,11 @@ const signin = (req, res, next) => {
         sameSite: true,
       });
 
-      res.status(OK).send(user);
+      res.status(OK).send({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      });
     })
     .catch(next);
 };

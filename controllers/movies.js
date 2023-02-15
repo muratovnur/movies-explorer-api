@@ -6,7 +6,7 @@ const { NotFoundError } = require('../errors/NotFoundError');
 const { OK } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
       res.status(OK).send(movies);
     })
@@ -37,9 +37,9 @@ const deleteMovie = (req, res, next) => {
         throw new ForbiddenError('Запрещено удалять чужой фильм.');
       }
 
-      movie.delete();
-
-      return res.status(OK).send(movie);
+      return movie.delete()
+        .then((deletedMovie) => res.status(OK).send(deletedMovie))
+        .catch(next);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {

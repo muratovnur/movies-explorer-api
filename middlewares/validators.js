@@ -19,8 +19,8 @@ const validateSignin = celebrate({
 
 const validateUpdateUserProfile = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().email(),
+    name: Joi.string().min(2).max(30).required(),
+    email: Joi.string().required().email(),
   }),
 });
 
@@ -29,7 +29,7 @@ const validateCreateMovie = celebrate({
     country: Joi.string().required(),
     director: Joi.string().required(),
     duration: Joi.number().required(),
-    year: Joi.number().required(),
+    year: Joi.string().required(),
     description: Joi.string().required(),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),

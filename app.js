@@ -36,6 +36,7 @@ app.use(auth);
 
 app.use('/users', usersRouter);
 app.use('/movies', moviesRouter);
+
 app.get('/signout', signout);
 app.use('/', (req, res, next) => next(new NotFoundError('По указанному пути ничего не найдено.')));
 
