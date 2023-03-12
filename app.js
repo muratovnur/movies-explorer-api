@@ -20,7 +20,7 @@ const app = express();
 
 mongoose.connect(DATABASE_ADDRESS);
 
-app.use(cors({ credentials: true, maxAge: 600, origin: ['http://movielib.nurbol.nomoredomains.work', 'https://movielib.nurbol.nomoredomains.work'] }));
+app.use(cors({ credentials: true, maxAge: 600, origin: ['http://localhost:3000/', 'http://movielib.nurbol.nomoredomains.work', 'https://movielib.nurbol.nomoredomains.work'] }));
 
 app.use(cookieParser());
 
