@@ -20,7 +20,7 @@ const app = express();
 
 mongoose.connect(DATABASE_ADDRESS);
 
-app.use(cors({ credentials: true, maxAge: 600, origin: ['http://localhost:3000', 'https://movies-explorer-a4812.web.app'] }));
+app.use(cors({ credentials: true, maxAge: 600, origin: ['http://localhost:3000', 'https://movies-explorer-a4812.web.app', 'https://movies-explorer-a4812.web.app/', 'https://movies-explorer-a4812.web.app//'] }));
 
 app.use(cookieParser());
 
