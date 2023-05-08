@@ -14,11 +14,20 @@ const { handleError } = require('./middlewares/handleError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { NotFoundError } = require('./errors/NotFoundError');
 
-const { DATABASE_ADDRESS = 'mongodb://127.0.0.1:27017/bitfilmsdb', PORT = 3000 } = process.env;
+const { DATABASE_ADDRESS, PORT = 3000 } = process.env;
 
 const app = express();
 
-mongoose.connect(DATABASE_ADDRESS);
+mongoose.set('strictQuery', false);
+const connectDB = async () => {
+  try {
+    await mongoose.connect(DATABASE_ADDRESS);
+  }
+  catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 
 app.use(cors({ credentials: true, maxAge: 600, origin: ['http://localhost:3000', 'https://movies-explorer-a4812.web.app', 'https://movies-explorer-a4812.web.app/', 'https://movies-explorer-a4812.web.app//'] }));
 
@@ -46,4 +55,6 @@ app.use(errors());
 
 app.use(handleError);
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}.`));
+connectDB().then(() => {
+  app.listen(PORT, () => console.log(`Server is running on port ${PORT}.`));
+});
